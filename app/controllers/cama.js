@@ -1,5 +1,4 @@
 var dateFormat  = require('dateformat');
-const cama = require('../routes/cama');
 
 module.exports.camas = function(application, req, res) {
 	var connection = application.config.dbConnection();
@@ -7,9 +6,10 @@ module.exports.camas = function(application, req, res) {
 	var camaModel = new application.app.models.CamaDAO(connection);
 
 	camaModel.FindAll(function(error, result){        
-        var camasResult = result;
-        
-        res.render('cama/lista_camas', {camas : camasResult});
+	
+		var quartos = ajusteQuartos(result);
+	    
+        res.render('cama/index', {quartos : quartos});
 	});		
 }
 
@@ -57,8 +57,6 @@ module.exports.form_editar_cama = function(application, req, res){
 module.exports.editar_camas = function(application, req, res){
 	var cama = req.body;
 
-	console.log(cama);
-
 	//req.assert('nome_cliente','Nome do cliente é obrigatorio').notEmpty();
 		
 	//req.assert('data_ingresso','Data da primeira compra é obrigatorio').notEmpty().isDate({format: 'YYYY-MM-DD'});
@@ -79,4 +77,46 @@ module.exports.editar_camas = function(application, req, res){
 		console.log(error);
 		res.redirect('/');
 	});
+}
+
+function ajusteQuartos (quartos){
+	var quartosResult = quartos;
+
+		var quartos = [];
+
+		var ultQuarto = 0;
+		
+		quartosResult.forEach(element => { 
+			
+			var statusCama = '';
+
+			if(element.status == 'Ativo'){
+				statusCama = 'Ocupado';
+			}else {
+				statusCama = 'Vago';
+			}
+
+			if(ultQuarto != element.id_quarto){
+				quartos.push( {nome : element.nome_quarto, camas: []});
+
+				ultQuarto = element.id_quarto;
+			}
+			
+			for(i = 0; i < quartos.length; i++){
+				if(quartos[i].nome == element.nome_quarto){
+
+					quartos[i].camas.push({
+						id_cama: element.id_cama,
+						id_quarto: element.id_quarto,
+						nome_cama: element.nome_cama,
+						tipo_cama: element.tipo_cama,
+						valor: element.valor,
+						nome_quarto: element.nome_quarto,
+						status: statusCama
+					});					
+				}				
+			}	
+		});
+
+		return quartos;
 }

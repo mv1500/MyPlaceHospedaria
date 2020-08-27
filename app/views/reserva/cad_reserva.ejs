@@ -1,119 +1,170 @@
 <!DOCTYPE HTML>
 <html lang="pt-br">
-	<head>
-		<meta charset="UTF-8">
 
-		<title>My Place Hospedaria</title>
-		
-		<!-- JQuery -->
-		<script src="js/jquery-2.2.1.js"></script>
+<head>
+	<meta charset="UTF-8">
 
-		<!-- bootstrap - link cdn -->
-		<link rel="stylesheet" href="css/bootstrap.min.css" >
+	<%- include('../_includes/cabecalho'); %>
 	
-		<!-- incluindo css -->
-		<link href="css/style.css" rel="stylesheet">
+</head>
 
-		<!-- favicon -->
-		<link rel="shortcut icon" href="" />
-	</head>
+<body>
 
-	<body>
+	<%- include('../_includes/navbar'); %>
 
-		<nav class="navbar navbar-default navbar-static-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					
-					<h3>My Place Hospedaria</h3>
-				</div>
-
-				<div id="navbar" class="navbar-collapse collapse">
-					<ul class="nav navbar-nav navbar-right">
-                        <li><a href="/">HOME</a></li>
-                        <li><a href="/lista_camas">Status das camas</a></li>
-						<li><a href="/Hospedes">Hospedes</a></li>
-						<li><a href="/Reservas">Reservas</a></li>
+	<div class="container">		
+		<% if(validacao.length > 0){ %>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="alert alert-danger">
+					<strong>Atenção!</strong>
+					<ul>
+						<% for(var i = 0; i < validacao.length; i++){ %>
+						<li><%= validacao[i].msg %></li>
+						<% }%>
 					</ul>
 				</div>
 			</div>
-		</nav>
-
-	<div class="container">	
-	    <div class="row">
-			<h2>Nova reserva</h2>
 		</div>
-
-		<% if(validacao.length > 0){ %>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="alert alert-danger">
-						<strong>Atenção!</strong>
-						<ul>
-							<% for(var i = 0; i < validacao.length; i++){ %>
-							<li><%= validacao[i].msg %></li>
-							<% }%>
-						</ul>
-					</div>
-				</div>
-			</div>
+		<br>
 		<% }%>
 
 		<div class="row">
-			<div class="col col-md-8">
-				<form action="/salvarReserva" method="post">
-				<div class="form-group">
+			<div class="col col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2>Nova reserva</h2>
+					</div>
+					<div class="panel-body" style="height: 300px;">
+						<div class="col col-lg-11" style="padding-left: 100px; padding-top: 10px;">
+						<form action="/salvarReserva" method="post">
+							<div class="form-group">
+								<div class="row" style="margin-bottom: 30px;">
+									<div class="col-lg-6">
+										<label>Quarto</label>
+										<select placeholder="Selecione a cama..." id="id_quarto" class="form-control"
+											onchange="defineOptionCama(this.value)" required>
+											<option value="">...Selecione...</option>
+										</select>
+									</div>
+									<div class="col-lg-6">
+										<label>Cama</label>
+										<select placeholder="Selecione a cama..." name="id_cama" id="id_cama"
+											class="form-control" required>
+											<option value="">...Selecione...</option>
+										</select>
+									</div>
+								</div>
 
-					<label>Quarto/Cama</label>
-					<select placeholder="Selecione a cama..." name="id_cama" class="form-control" required>
-						<option value="">...Selecione...</option>
-                        <% for(var i = 0; i < formDataQuarto.length; i++){ %>
-							<option value="<%= formDataQuarto[i].id_cama %>" ><%= formDataQuarto[i].nome_quarto %> - <%= formDataQuarto[i].nome_cama %></option>
-						<% }%>
-					</select>
-					<br>
+								<div class="row" style="margin-bottom: 40px;"> 
+									<div class="col-lg-6">
+										<label>Hospede</label>
+										<select placeholder="Selecione o meio de transporte..." name="id_hospede"
+											id="id_hospede" class="form-control" required>
+											<option value="">...Selecione...</option>
 
-					<label>Hospede</label>
-					<select placeholder="Selecione o meio de transporte..." name="id_hospede" class="form-control" required>
-						<option value="">...Selecione...</option>
-                        <% for(var i = 0; i < formDataHospede.length; i++){ %>
-							<option value="<%= formDataHospede[i].id_hospede %>" ><%= formDataHospede[i].nome %></option>
-						<% }%>
-					</select>
-					<br>
-
-                    <label>Checkin</label>
-					<input type="datetime-local" name="checkin" id="checkin" class="form-control" required><br>
-
-                    <input type="hidden" value="Ativo" name="status">
-				</div>				
-					<a href="/reservas" class="btn btn-danger">Voltar</a>
-					<input type="submit" value="Salvar" class="btn btn-primary">
-				</form>   
+										</select>
+									</div>
+									<div class="col-lg-6">
+										<label>Checkin</label>
+										<input type="datetime-local" name="checkin" id="checkin" class="form-control"
+											required>
+									</div>
+								</div>
+								<input type="hidden" value="Ativo" name="status">
+							
+							<div class="row" style="margin-left: 10px;">	
+								<div class="col col-lg-1">
+									<a href="/reservas" class="btn btn-danger">Voltar</a>
+								</div>
+								<div class="col col-lg-1">
+									<input type="submit" value="Salvar" class="btn btn-primary">
+								</div>
+							</div>
+						</div>
+						</form>
+					</div>
+					</div>
+				</div>
 			</div>
-		</div>   
+		</div>
 	</div>
-</div>   		
-	
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	
-		<script type="text/javascript">
+	</div>
 
-			$(document).ready(function(){
-				var today = new Date();
-				var dy = today.getDate().toString().padStart(2, '0');
-				var mt = (today.getMonth()+1).toString().padStart(2, '0');
-				var yr = today.getFullYear();
-				
-			  document.getElementById('checkin').value = yr+"-"+mt+"-"+dy;
-			});
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+		crossorigin="anonymous"></script>
 
-		</script>
+	<script type="text/javascript">
 
-	</body>
+		$(document).ready(function () {
+
+			defineData();
+
+			defineOptionQuarto();
+
+			defineOptionHospede();
+		});
+
+		function defineData() {
+			var today = new Date();
+			var dy = today.getDate().toString().padStart(2, '0');
+			var mt = (today.getMonth() + 1).toString().padStart(2, '0');
+			var yr = today.getFullYear();
+			var hh = today.getHours().toString();
+			var mn = today.getMinutes().toString().padStart(2, '0');
+			document.getElementById('checkin').value = yr + "-" + mt + "-" + dy + "T" + hh + ":" + mn;
+		}
+
+		function defineOptionQuarto() {
+			var ultimo_id = 0;
+				<% for (var i = 0; i < formDataQuarto.length; i++) { %>					
+					
+					var id_quarto = <%= formDataQuarto[i].id_quarto %>;
+
+				if (ultimo_id != id_quarto) {
+					var opcoes = document.createElement('option');
+					opcoes.value = id_quarto;
+					opcoes.innerHTML = "<%= formDataQuarto[i].nome_quarto %>";
+
+					document.getElementById('id_quarto').appendChild(opcoes);
+
+					ultimo_id = id_quarto;
+				}
+
+				<% }%>
+			}
+
+		function defineOptionCama(id_quarto) {
+
+			$("#id_cama").html('<option value="">...Selecione...</option>');
+
+				<% for (var i = 0; i < formDataQuarto.length; i++) { %>
+					if (id_quarto == <%= formDataQuarto[i].id_quarto %>) {
+
+					var opcoes = document.createElement('option');
+					opcoes.value = <%= formDataQuarto[i].id_cama %>;
+					opcoes.innerHTML = "<%= formDataQuarto[i].nome_quarto %> - <%= formDataQuarto[i].nome_cama %>";
+
+					document.getElementById('id_cama').appendChild(opcoes);
+				}
+				<% }%>
+			}
+
+		function defineOptionHospede() {			
+						
+				<% for (var i = 0; i < formDataHospede.length; i++) { %>					
+					
+					var opcoes = document.createElement('option');
+				opcoes.value = <%= formDataHospede[i].id_hospede %>;
+				opcoes.innerHTML = "<%= formDataHospede[i].nome %>";
+
+				document.getElementById('id_hospede').appendChild(opcoes);
+
+				<% }%>		
+			}
+	</script>
+
+</body>
+
 </html>

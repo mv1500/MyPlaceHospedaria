@@ -9,6 +9,7 @@ ReservaDAO.prototype.FindAll = function(callback){
 ReservaDAO.prototype.FindAtivas = function(callback){
 	this._connection.query("SELECT h.nome, q.nome_quarto, c.id_cama, c.nome_cama, r.id_reserva, r.checkin, r.status FROM reserva as r INNER JOIN hospede as h ON (r.id_hospede = h.id_hospede) INNER JOIN cama as c ON (r.id_cama = c.id_cama) INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) WHERE r.status = 'Ativo' order by r.checkin desc", callback);
 }
+
 ReservaDAO.prototype.getReserva = function(id_reserva, callback){
  	this._connection.query('SELECT r*, h.id_hospede, h.nome, c.id_cama, c.nome_cama, q.nome_quarto FROM reserva as r INNER JOIN hospede as h ON (r.id_hospede = h.id_hospede) INNER JOIN cama as c ON (r.id_cama = c.id_cama) INNER JOIN quarto as q ON (c.id_quarto = c.id_quarto) WHERE r.id_reserva = ' + id_reserva.id_reserva, callback);
 }

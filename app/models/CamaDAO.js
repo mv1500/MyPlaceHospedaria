@@ -3,7 +3,11 @@ function CamaDAO(connection){
 }
 
 CamaDAO.prototype.FindAll = function(callback){
-		this._connection.query('SELECT c.*, q.nome_quarto, sc.status FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) INNER JOIN status_cama as sc ON (c.id_cama = sc.id_cama)', callback);
+		this._connection.query("SELECT c.*, (SELECT reserva.status from cama INNER JOIN reserva on (cama.id_cama = reserva.id_cama) WHERE reserva.id_cama = c.id_cama and reserva.status = 'Ativo' ORDER by reserva.id_cama LIMIT 1) as status, q.nome_quarto FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto)", callback);
+}
+
+CamaDAO.prototype.FindGetDay = function(callback){
+		this._connection.query("SELECT c.*, (SELECT reserva.status from cama INNER JOIN reserva on (cama.id_cama = reserva.id_cama) WHERE reserva.id_cama = c.id_cama and reserva.status = 'Ativo' ORDER by reserva.id_cama LIMIT 1) as status, q.nome_quarto FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto)", callback);
 }
 
 CamaDAO.prototype.InfoCama = function(id_cama, callback){
@@ -15,11 +19,11 @@ CamaDAO.prototype.editarCama = function(cama, callback) {
 }
 
 CamaDAO.prototype.getCamasVagas = function(callback){
-    this._connection.query("SELECT c.*, q.nome_quarto, sc.status FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) INNER JOIN status_cama as sc ON (c.id_cama = sc.id_cama) WHERE sc.status = 'Vago'", callback);
+    this._connection.query("SELECT c.*, q.nome_quarto FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) WHERE NOT EXISTS (SELECT reserva.status from cama INNER JOIN reserva on (cama.id_cama = reserva.id_cama) WHERE reserva.id_cama = c.id_cama and reserva.status = 'Ativo' ORDER by reserva.checkin LIMIT 1)", callback);
 }
 
 CamaDAO.prototype.getCamasOcupadas = function(callback){
-    this._connection.query("SELECT c.*, q.nome_quarto, sc.status FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) INNER JOIN status_cama as sc ON (c.id_cama = sc.id_cama) WHERE sc.status = 'Ocupado'", callback);
+    this._connection.query("SELECT c.*, q.nome_quarto FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) WHERE EXISTS (SELECT reserva.status from cama INNER JOIN reserva on (cama.id_cama = reserva.id_cama) WHERE reserva.id_cama = c.id_cama and reserva.status = 'Ativo' ORDER by reserva.checkin LIMIT 1)", callback);
 }
 
 CamaDAO.prototype.reservarCama = function(id_cama, callback){

@@ -57,12 +57,14 @@ module.exports.reserva = function(application, req, res) {
 
 module.exports.cad_reserva = function(application, req, res){
     var reservaForm = {formDataQuarto : {}, formDataHospede : {}};
-
+    
     var connection = application.config.dbConnection();
 
-    var reservaModel = new application.app.models.ReservaDAO(connection);
+    var camaModel = new application.app.models.CamaDAO(connection);
     
-    reservaModel.formQuarto(function(error, result){
+    camaModel.getCamasVagas(function(error, result){
+
+        console.log(result);
         reservaForm.formDataQuarto = result;
 
     });	

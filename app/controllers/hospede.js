@@ -81,11 +81,8 @@ module.exports.salvarHospede = function(application, req, res) {
 
 			endereco.id_hospede = result.insertId;
 
-			hospedeModel.salvarEndereco_hospede(endereco, function(error, result){
-				
-				console.log(result);
-				res.redirect('/hospedes');
-					
+			hospedeModel.salvarEndereco_hospede(endereco, function(error, result){				
+				res.redirect('/cad_reserva');					
 			});
 		});
 }
