@@ -26,14 +26,6 @@ CamaDAO.prototype.getCamasOcupadas = function(callback){
     this._connection.query("SELECT c.*, q.nome_quarto FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) WHERE EXISTS (SELECT reserva.status from cama INNER JOIN reserva on (cama.id_cama = reserva.id_cama) WHERE reserva.id_cama = c.id_cama and reserva.status = 'Ativo' ORDER by reserva.checkin LIMIT 1)", callback);
 }
 
-CamaDAO.prototype.reservarCama = function(id_cama, callback){
-    this._connection.query("update status_cama SET status = 'Ocupado'  where id_cama = " +id_cama, callback);
-}
-
-CamaDAO.prototype.checkoutCama = function(id_cama, callback){
- this._connection.query("update status_cama SET status = 'Vago'  where id_cama = " +id_cama, callback);
-}
-
 module.exports = function(){
 	 return CamaDAO;
 }

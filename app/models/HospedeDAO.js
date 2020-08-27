@@ -7,7 +7,7 @@ HospedeDAO.prototype.FindAll = function(callback){
 }
 
 HospedeDAO.prototype.getHospedeForm = function(callback){
-		this._connection.query('select id_hospede, nome from hospede order by nome', callback);
+		this._connection.query("select id_hospede, nome from hospede WHERE NOT EXISTS (SELECT h.* from hospede as h INNER JOIN reserva as r on (h.id_hospede = r.id_hospede) WHERE r.id_hospede = hospede.id_hospede AND r.status = 'Ativo') order by nome", callback);
 }
 
 HospedeDAO.prototype.getHospede = function(id_hospede, callback){

@@ -63,10 +63,7 @@ module.exports.cad_reserva = function(application, req, res){
     var camaModel = new application.app.models.CamaDAO(connection);
     
     camaModel.getCamasVagas(function(error, result){
-
-        console.log(result);
         reservaForm.formDataQuarto = result;
-
     });	
     
     var hospedeModel = new application.app.models.HospedeDAO(connection);
@@ -102,15 +99,7 @@ module.exports.salvarReserva = function(application, req, res) {
 
     reservaModel.salvarReserva(reserva, function(error, result){       
         
-        if(result){
-            console.log(result);
-            camaModel.reservarCama(reserva.id_cama, function(error, result){
-                res.redirect('/reservas');        
-            });
-        } else{
-            res.render("reserva/cad_reserva", {validacao : error, reserva : reserva});  
-            return;         
-        }
+        res.redirect('/reservas');        
     });
 }
 
@@ -124,15 +113,9 @@ module.exports.checkout = function(application, req, res){
     var checkout = req.body;
 
     checkout.status = "Finalizada";
-
-    console.log(checkout);
-    
-    reservaModel.checkoutReserva(checkout,function(error, result){
-    
-        camaModel.checkoutCama(checkout.id_cama, function(error, result){
-            res.redirect('/reservas');    
-        });        
-    
+   
+    reservaModel.checkoutReserva(checkout,function(error, result){    
+          res.redirect('/reservas');        
     });	
 }
  
@@ -145,13 +128,8 @@ module.exports.deleteReserva = function(application, req, res) {
 
     var id_reserva = req.query;
 
-    console.log(id_reserva);
-
-    reservaModel.deleteReserva(id_reserva, function(error, result){
-        
-        camaModel.checkoutQuarto(id_reserva.id_cama, function(error, result){
-            res.redirect('/reservas');    
-        });        
+    reservaModel.deleteReserva(id_reserva, function(error, result){        
+        res.redirect('/reservas');    
     });	
 }
 
