@@ -12,7 +12,6 @@
 
 	<%- include('../_includes/navbar'); %>
 
-
 	<div class="container">
 		
 		<div class="row">
@@ -28,7 +27,7 @@
 								<a href="/historico_reserva">Historico de reservas</a>
 							</div>
 							<div class="col col-lg-2 col-lg-offset-5">
-								<button onclick="modalNewReserva()" class="btn btn-primary btn-sm">Nova reserva</button>
+								<button onclick="modalNewReserva()" class="btn btn-primary btn-sm">Nova reserva</button>								
 							</div>
 						</div>
 					
@@ -57,6 +56,9 @@
 												<button class="btn btn-info"
 													onclick="modalCheckout(<%= reservas[i].id_reserva %>, <%= reservas[i].id_cama %>)">Registrar
 													checkout</button>
+											</td>
+											<td>
+												<button class="btn btn-info btn-xs" onclick="modalConsumo(<%= reservas[i].id_reserva %>)">Registrar consumo</button>
 											</td>
 											<!--<td>
 												<a class="btn btn-primary btn-sm"
@@ -145,12 +147,16 @@
 		</div>
 	</div>
 
+	<%- include('modais_reserva'); %>
 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
 		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 		crossorigin="anonymous"></script>
 
 	<script type="text/javascript">
+		var itensConsumo = {};
+		var valorItem = 0;
+
 		function deleteReserva(id_reserva) {
 			var endereço = "/deleteReserva?id_reserva= ";
 			var id = id_reserva;
@@ -176,6 +182,104 @@
 			document.getElementById('id_cama').value = id_cama;
 			document.getElementById('id_reserva').value = id_reserva;
 		}
+
+		function modalConsumo(id_reserva){
+			console.log(id_reserva);
+			$('#modalConsumo').modal('show');
+			$('#id_reservaModal').val(id_reserva);
+
+			$.ajax({
+				url: '/itens',
+				method: "post",
+				success: function(data){
+					if(data){
+						itensConsumo = data;
+						defineOpptionsConsumo(itensConsumo);
+						$('#div_valor_total').hide();
+					}					
+				}
+			});	
+			
+		}
+
+		$('#btn_salvar_itemConsumo').click(function(){
+
+			var data = {
+				id_item : $('#id_item').val(),
+				id_reserva : $('#id_reservaModal').val(), 
+				quantidade : $('#quantidade').val(),
+				desconto : $('#desconto').val(),
+				valor_total : $('#valor_total').val()
+			};
+
+			$.ajax({
+
+				url: '/salvarItemConsumido',
+
+				method: 'POST',
+
+				data: data,
+
+				success: function(data){
+
+					$('#modalConsumo').modal('hide');
+
+					var dialog = bootbox.dialog({
+						message: '<p class="text-center mb-0">'+data+'</p>',
+						closeButton: false
+					}).addClass("modal-dialog-centered");	
+									
+					setTimeout(function(){ 
+						dialog.modal('hide'); 
+					},1500);
+				}
+			});
+
+		});
+
+		function defineOpptionsConsumo(itens){
+			console.log(itens);
+			for (var i = 0; i < itens.length; i++){
+			
+				var opcoes = document.createElement('option');
+				
+				opcoes.value = itens[i].id_item;
+				opcoes.innerHTML = itens[i].nome_item + " - R$" +itens[i].valor;
+
+				$('#id_item').append(opcoes);
+
+			}
+		}
+
+		function getValorItem(id){
+			var valor = 0;
+			for(i = 0; i < itensConsumo.length; i++){
+				if(itensConsumo[i].id_item == id){
+					valor = itensConsumo[i].valor;
+				}
+			}
+			return valor;
+		}
+	
+		function setValorTotal(id){
+			$('#valor_item').val(getValorItem(id));
+			
+			$('#desconto').val(0);
+
+			$('#quantidade').val(1);
+
+			$('#div_valor_total').hide();
+		}
+
+		function calcularValorTotal(){
+			var valor = $('#valor_item').val();
+			var qnt = $('#quantidade').val();
+			var desconto = $('#desconto').val();
+			var valor_total = (valor * qnt) - desconto;		
+
+			$('#valor_total').val(valor_total);
+			$('#div_valor_total').show();
+		}		
 	</script>
 
 </body>

@@ -1,0 +1,76 @@
+<!--Modal de nova reserva-->
+<div class="modal fade" id="newReserva">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Cadastrar nova reserva</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="row">
+              <div class="col col-lg-12">
+                <a class="btn btn-primary btn-lg btn-block" href="/cad_hospede"> Hospede não
+                  cadastrado</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-lg-12 text-center">
+                <h5>-OU-</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-lg-12">
+                <a class="btn btn-primary btn-lg btn-block" href="/cad_reserva"> Hospede já
+                  cadastrado</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal de consumo-->
+<div class="modal fade" tabindex="-1" id="modalConsumo" role="dialog" aria-labelledby="modalConsumo">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalConsumo">Produtos para consumo</h4>
+      </div>
+      <div class="modal-body">          
+          <form id="form_cadItemConsumo" method="post">
+
+              <label>Item</label>
+              <select name="id_item" id="id_item" class="form-control" onchange="setValorTotal(this.value)" required>
+                  <option value="">...Selecione...</option>
+              </select>
+
+              <label>Valor do item</label>
+              <input type="number" id="valor_item" readonly class="form-control-plaintext form-control">
+              
+              <input type="hidden" nome="id_reserva" id="id_reservaModal">
+
+              <label>Quantidade</label>
+              <input type="number" nome="quantidade" id="quantidade" class="form-control" onchange="calcularValorTotal()" required>
+
+              <label>Desconto (Opicional)</label>
+              <input type="number" nome="desconto" id="desconto" value="0" onchange="calcularValorTotal()" class="form-control">
+
+              <div id="div_valor_total">
+                <label>Valor total</label>
+                <input type="number" nome="valor_total" id="valor_total" readonly class="form-control-plaintext form-control">
+              </div>
+
+              <br>              
+          </form>        
+          <button id="btn_salvar_itemConsumo" class="btn btn-primary">Cadastrar</button>
+      </div>
+      
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

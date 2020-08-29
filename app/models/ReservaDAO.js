@@ -34,13 +34,6 @@ ReservaDAO.prototype.formQuarto = function(callback){
    this._connection.query("SELECT c.id_cama, c.nome_cama, q.id_quarto, q.nome_quarto, s.status FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) INNER JOIN status_cama as s ON (c.id_cama = s.id_cama) where s.status ='vago'", callback);
 }
 
-ReservaDAO.prototype.ocupaQuarto = function(id_cama, callback){
-   this._connection.query("update status_cama SET status = 'Ocupado'  where id_cama = " +id_cama, callback);
-}
-
-ReservaDAO.prototype.checkoutQuarto = function(id_cama, callback){
-	this._connection.query("update status_cama SET status = 'Vago'  where id_cama = " +id_cama.id_cama, callback);
-}
 module.exports = function(){
 	 return ReservaDAO;
 }
