@@ -1,0 +1,53 @@
+<!--Modal de cadastro de itens-->
+<div class="modal fade" tabindex="-1" id="modalCadItem" role="dialog" aria-labelledby="modalCadItem">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="modalCadItem">Cadastrar item</h4>
+        </div>
+        <div class="modal-body">          
+            <form id="form_cadItem" method="post">
+  
+                <label>Item</label>
+                <input type="text" id="nome_item" name="nome_item" class="form-control" required>
+  
+                <label>Valor</label>
+                <input type="number" nome="valor" id="valor" class="form-control" required>  
+                          
+            </form>        
+            <br>
+            <button id="btn_salvar_item" class="btn btn-primary">Salvar</button>
+        </div>
+        
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<!--Modal de edição de itens-->
+<div class="modal fade" tabindex="-1" id="modalEditarItem" role="dialog" aria-labelledby="modalEditarItem">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="modalEditarItem">Editar item</h4>
+        </div>
+        <div class="modal-body">          
+            <form id="form_cadItem" method="post">
+
+                <label>Item</label>
+                <input type="text" id="nome_item_editar" name="nome_item_editar" class="form-control" required>
+  
+                <label>Valor</label>
+                <input type="number" nome="valor" id="valor_editar" class="form-control" required>  
+
+                <input type="hidden" id="id_item_editar" name="id_item">
+                
+            </form>        
+            <br>
+            <button id="btn_editar_itens" class="btn btn-primary">Editar</button>
+        </div>
+        
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->

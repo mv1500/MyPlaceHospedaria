@@ -1,0 +1,186 @@
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+
+	<%- include('../_includes/cabecalho'); %>
+
+</head>
+
+<body>
+	<%- include('../_includes/navbar'); %>
+
+	<div class="container corpoSite">
+		<div class="row">
+			<div class="col col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2>Detalhes da reserva</h2>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col col-lg-12" style="margin-bottom: 25px; text-align: center;">
+								<h3><b>Informações</b></h3>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col col-lg-10 col-lg-offset-1">
+								<table class="table table-striped">
+									<tbody>
+										<tr id="detalhes_reserva_titulo">
+											<th>Cod reserva</th>
+											<td><%= reserva[0].id_reserva %></td>
+										</tr>
+										<tr>
+											<th>Hospede</th>
+											<td><%= reserva[0].nome %></td>
+										</tr>
+										<tr>
+											<th>Quarto</th>
+											<td><%= reserva[0].nome_quarto %></td>
+										</tr>	
+										<tr>
+											<th>Cama</th>
+											<td><%= reserva[0].nome_cama %></td>
+										</tr>	
+										<tr>
+											<th>Checkin</th>
+											<td><%= reserva[0].checkin %></td>
+										</tr>
+										<tr>
+											<th>Status</th>
+											<td><%= reserva[0].status %></td>
+										</tr>
+										<%if(reserva[0].status != "Ativo"){ %>
+										<tr>																		
+											<th>Checkout</th>
+											<td><%= reserva[0].data_checkout %></td>											
+										</tr>
+										<% } %>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						<br>
+						<br>
+
+						<div class="row">
+							<div class="col col-lg-12" style="margin-bottom: 25px; text-align: center;">
+								<h3><b>Consumo</b></h3>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col col-lg-10 col-lg-offset-1">
+								
+								<table class="table table-striped">
+									<thead>
+										<th>Item</th>
+										<th>Data do consumo</th>
+										<th>Valor total</th>
+									</thead>
+									<tbody id="consumo">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		 
+	</div>
+	<script src="css/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<script>
+
+		$(document).ready(function(){
+			
+			getItensConsumo();	
+						
+		});
+
+		function getItensConsumo(){
+
+			var id_reserva = <%= reserva[0].id_reserva %>;
+			
+			$.ajax({
+				url: '/ItensConsumidos',
+				method: "post",
+				data: {id_reserva : id_reserva},
+				success: function(data){					
+					if(data){
+						
+						itens = data.itens;
+
+						for(var i = 0; i < itens.length; i++){
+							
+							var trItem = $("<td> </td>").text(itens[i].nome_item + "("+itens[i].quantidade+")");
+							var trDataConsumo = $("<td> </td>").text(itens[i].data_consumo);
+							var trValorTotal = $("<td> </td>").text("R$"+itens[i].valor_total);
+							var tr = $("<tr> </tr>");
+							var botao =  "<td>"+
+											"<a class='btn btn-danger btn-sm' onclick='deleteItensConsumo("+itens[i].id_item_consumo+")'>Excluir</a>"+
+										"</td>";	
+							tr.append(trItem);
+							tr.append(trDataConsumo);
+							tr.append(trValorTotal);
+							tr.append(botao);
+
+							console.log(botao);
+
+							$('#consumo').append(tr);
+						}	
+
+						var trTotal = $("<tr> </tr>");
+						trTotal.append("<th>Valor total do consumo </th> <td>R$"+data.totalConsumo+"</td>");
+						$('#consumo').append(trTotal);
+
+					}					
+				}
+			});	
+		}
+
+		function deleteItensConsumo(id_item_consumo) {
+			
+			var id = id_item_consumo;
+			console.log(id);
+			bootbox.confirm({
+				size: "small",
+				title: "Atenção",
+				message: "Confirmar exclusão?",
+				callback: function (result) {
+					if (!result) return;
+
+					$.ajax({
+						url: '/excluirItemConsumido',
+						method: "post",
+						data: {id_item_consumo : id},
+						success: function(data){					
+							if(data){
+								
+								var dialog = bootbox.dialog({
+									title: 'Sucesso!',
+									message: '<p class="text-center mb-0">'+data+'</p>',
+									closeButton: false
+								}).addClass("modal-dialog-centered");	
+								
+								$('#consumo').html("");
+
+								setTimeout(function(){ 
+									dialog.modal('hide');
+									$('#consumo').html();
+									getItensConsumo();
+								},1500);
+							}					
+						}
+					});	
+					
+				}
+			});
+		}
+
+	</script>
+
+</body>
+
+</html>

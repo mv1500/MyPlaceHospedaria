@@ -12,17 +12,17 @@ ItensConsumoDAO.prototype.salvarItem = function(item, callback){
 }
 
 ItensConsumoDAO.prototype.editarItem = function(item, callback){
-		this._connection.query("update item SET nome_item = '" + item.nome_item+ "' valor = '"+item.valor+"' where id_item = "+item.id_item, callback);
+		this._connection.query("update itens SET nome_item = '" + item.nome_item+ "', valor = "+item.valor+" where id_item = "+item.id_item, callback);
 }
 
 ItensConsumoDAO.prototype.excluirItem = function(id_item, callback){
-		this._connection.query("delete from item_consumo where id_item_consumo = "+id_item, callback);
+		this._connection.query("delete from itens where id_item = "+id_item, callback);
 }
 
 
 //Itens consumidos
 ItensConsumoDAO.prototype.FindItensConsumidos = function(id_reserva, callback){
-		this._connection.query("SELECT i.*, ic.* FROM item_consumo as ic inner join itens as i on (ic.id_item = i.id_item) where i.id_reserva = " +id_reserva +" order by data_consumo", callback);
+		this._connection.query("SELECT i.*, ic.* FROM item_consumo as ic inner join itens as i on (ic.id_item = i.id_item) where ic.id_reserva = " +id_reserva +" order by data_consumo desc", callback);
 }
 
 ItensConsumoDAO.prototype.salvarItemConsumido = function(itemConsumido, callback){

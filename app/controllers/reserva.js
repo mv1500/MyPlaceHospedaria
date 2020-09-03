@@ -44,12 +44,14 @@ module.exports.reserva = function(application, req, res) {
 	var id_reserva = req.query;
 
 	reservaModel.getReserva(id_reserva, function(error, result){
-		
-		var reservaResult = result;
+
+ 		var reservaResult = result;
 
         reservaResult[0].checkin = dateFormat(reservaResult[0].checkin,"dd/mm/yyyy HH:MM");
         
-        reservaResult[0].data_checkout = dateFormat(reservaResult[0].data_checkout,"dd/mm/yyyy HH:MM");
+        if(reservaResult[0].status != 'Ativo'){
+            reservaResult[0].data_checkout = dateFormat(reservaResult[0].data_checkout,"dd/mm/yyyy HH:MM");
+        }
 
 		res.render('reserva/reserva', {reserva : reservaResult});
 	});
@@ -69,6 +71,7 @@ module.exports.cad_reserva = function(application, req, res){
     var hospedeModel = new application.app.models.HospedeDAO(connection);
 
     hospedeModel.getHospedeForm(function(error, result){
+       
         reservaForm.formDataHospede = result;
 
         res.render("reserva/cad_reserva", {validacao :{}, reserva : {}, formDataQuarto : reservaForm.formDataQuarto, formDataHospede : reservaForm.formDataHospede});

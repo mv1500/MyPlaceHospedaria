@@ -12,21 +12,18 @@
 
 	<%- include('../_includes/navbar'); %>
 
-	<div class="container">
+	<div class="container corpoSite">
 		
-		<div class="row">
-			<div class="col-lg-12" style="padding-left: 100px; padding-top:30px;">
+		<div class="row ">
+			<div class="col-lg-12" style="padding-left: 50px; padding-top:30px;">
 				<div class="panel panel-default">
 					<div class="panel-heading">						
 						<h2>Reservas Ativas</h2>						
 					</div>	
 
 					<div class="panel-body">
-						<div class="row" style="padding-top: 30px; padding-bottom: 30px;">
-							<div class="col col-lg-4" style="margin-left: 30px;">
-								<a href="/historico_reserva">Historico de reservas</a>
-							</div>
-							<div class="col col-lg-2 col-lg-offset-5">
+						<div class="row" style="padding-top: 30px; padding-bottom: 30px;">							
+							<div class="col col-lg-2 col-lg-offset-10">
 								<button onclick="modalNewReserva()" class="btn btn-primary btn-sm">Nova reserva</button>								
 							</div>
 						</div>
@@ -36,9 +33,10 @@
 								
 								<table class="table table-striped table-hover table-sm">
 									<thead>
+										<th class="col-lg-1">Cod</th>
 										<th class="col-lg-3">Quarto </th>
 										<th class="col-lg-3">Cama</th>
-										<th class="col-lg-4">Cliente</th>
+										<th class="col-lg-3">Cliente</th>
 										<th class="col-lg-2">Chekin</th>
 										<th colspan="2">Ações</th>
 									</thead>
@@ -46,29 +44,26 @@
 										<% if(reservas.length > 0){ %>
 										<% for(var i = 0; i < reservas.length; i++){ %>
 										<tr>
+											<td class="col-lg-1"><a
+												href="reserva?id_reserva=<%= reservas[i].id_reserva %>"><%= reservas[i].id_reserva %></a>
+											</td>
 											<td class="col-lg-3"><%= reservas[i].nome_quarto %></td>
 											<td class="col-lg-3"><%= reservas[i].nome_cama %></td>
-											<td class="col-lg-4"><a
-													href="reserva?id_reserva=<%= reservas[i].id_reserva %>"><%= reservas[i].nome %></a>
-											</td>
-											<td class="col-lg-2"><%= reservas[i].checkin %></td>
+											<td class="col-lg-3"><%= reservas[i].nome %></td>
+											<td class="col-lg-20"><%= reservas[i].checkin %></td>
 											<td>
-												<button class="btn btn-info"
-													onclick="modalCheckout(<%= reservas[i].id_reserva %>, <%= reservas[i].id_cama %>)">Registrar
-													checkout</button>
+											<div class="btn-group">
+												<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												  <span class="glyphicon glyphicon-option-vertical"></span> 
+												</button>
+												<ul class="dropdown-menu">
+												  <li><a class="btn btn-link" onclick="modalCheckout(<%= reservas[i].id_reserva %>, <%= reservas[i].id_cama %>)">Registrar checkout</a></li>
+												  <li><a class="btn btn-link" onclick="modalConsumo(<%= reservas[i].id_reserva %>)">Registrar consumo</a></li>
+												  <!--<li><a class="btn btn-primary btn-sm" href="/form_editar_reserva?id_reserva=<%= reservas[i].id_reserva %>&id_quarto=">Editar</a></li>-->
+												  <li><a class="btn btn-link" onclick="deleteReserva(<%= reservas[i].id_reserva %>, <%= reservas[i].id_quarto %>)">Excluir</a></li>
+												</ul>
+											  </div>
 											</td>
-											<td>
-												<button class="btn btn-info btn-xs" onclick="modalConsumo(<%= reservas[i].id_reserva %>)">Registrar consumo</button>
-											</td>
-											<!--<td>
-												<a class="btn btn-primary btn-sm"
-													href="/form_editar_reserva?id_reserva=<%= reservas[i].id_reserva %>&id_quarto=">Editar</a>
-											</td> -->
-											<td>
-												<button class="btn btn-danger btn-sm"
-													onclick="deleteReserva(<%= reservas[i].id_reserva %>, <%= reservas[i].id_quarto %>)">Excluir</button>
-											</td>
-										</tr>
 										<% } %>
 										<% } %>
 									</tbody>
@@ -81,81 +76,26 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="checkout">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<form method="POST" action="/checkoutReserva">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-								aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title">Checkout reserva</h4>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="form-group col-sm-6 col-md-6 col-lg-6">
-								<label>Hora checkout</label>
-								<input type="datetime-local" class="form-control required" name="data_checkout"
-									ng-model="viewdata.anime.Nome" />
-							</div>
-							<div class="form-group col-sm-6 col-md-6 col-lg-6">
-								<input type="hidden" name="id_reserva" id="id_reserva" />
-								<input type="hidden" name="id_cama" id="id_cama" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="form-group col-md-4 col-lg-3">
-								<input type="submit" class="btn btn-primary form-control"></div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
 
-	<div class="modal fade" id="newReserva">
-		<div class="modal-dialog modal-md">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Cadastrar nova reserva</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-md-6 col-md-offset-3">
-							<div class="row">
-								<div class="col col-lg-12">
-									<a class="btn btn-primary btn-lg btn-block" href="/cad_hospede"> Hospede não
-										cadastrado</a>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col col-lg-12 text-center">
-									<h5>-OU-</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col col-lg-12">
-									<a class="btn btn-primary btn-lg btn-block" href="/cad_reserva"> Hospede já
-										cadastrado</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	  		 
+			
+			
+
+	
+	
+
+	
 
 	<%- include('modais_reserva'); %>
 
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-		crossorigin="anonymous"></script>
+	<script src="css/bootstrap/dist/js/bootstrap.min.js"></script>
 
 	<script type="text/javascript">
 		var itensConsumo = {};
-		var valorItem = 0;
+		
+		function modalNewReserva() {
+			$('#newReserva').modal('show');
+		}
 
 		function deleteReserva(id_reserva) {
 			var endereço = "/deleteReserva?id_reserva= ";
@@ -170,11 +110,7 @@
 					window.location.href = endereço + id;
 				}
 			});
-		}
-
-		function modalNewReserva() {
-			$('#newReserva').modal('show');
-		}
+		}		
 
 		function modalCheckout(id_reserva, id_cama) {
 
@@ -231,6 +167,12 @@
 									
 					setTimeout(function(){ 
 						dialog.modal('hide'); 
+						
+						$('#id_item').val(''),
+						$('#id_reservaModal').val(''), 
+						$('#quantidade').val(1),
+						$('#desconto').val(0),
+						$('#valor_total').val(0)
 					},1500);
 				}
 			});
@@ -269,6 +211,8 @@
 			$('#quantidade').val(1);
 
 			$('#div_valor_total').hide();
+
+			$('#valor_total').val(getValorItem(id));
 		}
 
 		function calcularValorTotal(){
@@ -283,5 +227,4 @@
 	</script>
 
 </body>
-
 </html>

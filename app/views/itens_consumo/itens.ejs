@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+
+	<%- include('../_includes/cabecalho'); %>
+
+</head>
+
+<body>
+	<%- include('../_includes/navbar'); %>
+
+	<div class="container corpoSite">
+		<div class="row" style="margin-left: 150px; margin-top: 20px;">
+			<div class="col col-lg-10">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2>Lista de itens para consumo</h2>
+					</div>
+
+					<div class="panel-body">
+						<div class="row" style="margin-bottom: 20px; text-align: right;">
+							<div class="col col-lg-11">
+								<button class="btn btn-info btn-xs" id="btn_novoItem">
+									<span class="glyphicon glyphicon-plus"></span> Novo item
+								</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col col-lg-11"
+								style="margin-left: 30px; border: 1px solid #C0C0C0; border-radius: 10px;">
+								<table class="table table-striped table-hover table-sm">
+									<thead>
+										<th class="col-lg-7">Item </th>
+										<th class="col-lg-6">Valor</th>
+										<th></th>
+									</thead>
+									<tbody>
+										<% if(itens.length > 0){ %>
+										<% for(var i = 0; i < itens.length; i++){ %>
+										<tr>
+											<td class="col-lg-3"><%= itens[i].nome_item %></td>
+											<td class="col-lg-3">R$ <%= itens[i].valor %></td>
+											<td>
+												<div class="btn-group">
+													<button type="button" class="btn btn-default btn-xs dropdown-toggle"
+														data-toggle="dropdown" aria-haspopup="true"
+														aria-expanded="false">
+														<span class="glyphicon glyphicon-option-vertical"></span>
+													</button>
+													<ul class="dropdown-menu">
+														<li><a class="btn btn-link" onclick="editarItem(<%= itens[i].id_item %>)">Editar</a></li>
+														<li><a class="btn btn-link"
+																onclick="deleteItens(<%= itens[i].id_item %>)">Excluir</a>
+														</li>
+													</ul>
+												</div>
+											</td>
+											<% } %>
+											<% } %>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+
+	<%- include('modais_itens'); %>
+
+	<script src="css/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<script>
+		$(document).ready(function(){
+			
+			$('#btn_novoItem').click(function(){
+			
+				$('#modalCadItem').modal('show');
+			
+			});
+
+			$('#btn_salvar_item').click(function(){
+
+				var data = {
+					nome_item : $('#nome_item').val(),					
+					valor : $('#valor').val()
+				};
+
+				$.ajax({
+
+					url: '/salvarItens',
+
+					method: 'POST',
+
+					data: data,
+
+					success: function(data){
+
+						$('#modalCadItem').modal('hide');
+
+						var dialog = bootbox.dialog({
+							title: 'Sucesso!',
+							message: '<p class="text-center mb-0">'+data+'</p>',
+							closeButton: false
+						}).addClass("modal-dialog-centered");	
+										
+						setTimeout(function(){ 
+							dialog.modal('hide');
+							
+							window.location.href = '/itens';
+						},1500);
+					}
+				});
+
+			});
+
+			$('#btn_editar_itens').click(function(){
+
+				var data = {
+					id_item : $('#id_item_editar').val(),
+					nome_item : $('#nome_item_editar').val(),					
+					valor : $('#valor_editar').val()
+				};
+
+				$.ajax({
+
+					url: '/editarItens',
+
+					method: 'POST',
+
+					data: data,
+
+					success: function(data){
+
+						$('#modalEditarItem').modal('hide');
+
+						var dialog = bootbox.dialog({
+							title: 'Sucesso!',
+							message: '<p class="text-center mb-0">'+data+'</p>',
+							closeButton: false
+						}).addClass("modal-dialog-centered");	
+										
+						setTimeout(function(){ 
+							dialog.modal('hide');
+							
+							window.location.href = '/itens';
+						},1500);
+					}
+				});
+
+			});
+
+		});
+
+		function editarItem(id){
+
+			<% for(var i = 0; i < itens.length; i++){ %>
+				
+				if(id == <%= itens[i].id_item %>){
+					$('#id_item_editar').val(id);
+					$('#nome_item_editar').val("<%= itens[i].nome_item %>");
+					$('#valor_editar').val(<%= itens[i].valor %>);
+					$('#modalEditarItem').modal('show');			
+				}
+			<% } %>
+
+		}
+
+		function deleteItens(id_item) {
+			var endereço = "/excluirItens?id_item= ";
+			var id = id_item;
+			console.log(id);
+			bootbox.confirm({
+				size: "small",
+				title: "Atenção",
+				message: "Confirmar exclusão?",
+				callback: function (result) {
+					if (!result) return;
+					window.location.href = endereço + id;
+				}
+			});
+		}
+
+	</script>
+
+</body>
+</html>

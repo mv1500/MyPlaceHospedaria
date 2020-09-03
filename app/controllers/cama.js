@@ -48,7 +48,7 @@ module.exports.form_editar_cama = function(application, req, res){
 
 		var camaResult = result;
 
-		console.log(result);
+		console.log(error);
 
 		res.render("cama/form_editar_cama", {validacao : {}, cama: camaResult });
 	});

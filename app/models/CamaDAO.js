@@ -11,7 +11,7 @@ CamaDAO.prototype.FindGetDay = function(callback){
 }
 
 CamaDAO.prototype.InfoCama = function(id_cama, callback){
- 	this._connection.query('SELECT c.*, q.nome_quarto, sc.status FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) INNER JOIN status_cama as sc ON (c.id_cama = sc.id_cama) where c.id_cama = ' + id_cama.id_cama, callback);
+ 	this._connection.query('SELECT c.*, q.nome_quarto FROM cama as c INNER JOIN quarto as q ON (c.id_quarto = q.id_quarto) where c.id_cama = ' + id_cama.id_cama, callback);
 }
 
 CamaDAO.prototype.editarCama = function(cama, callback) {
