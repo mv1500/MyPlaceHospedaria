@@ -18,7 +18,7 @@
 			<div class="col-lg-12" style="padding-left: 50px; padding-top:30px;">
 				<div class="panel panel-default">
 					<div class="panel-heading">						
-						<h2>Reservas Ativas</h2>						
+						<h2 class="tituloCard">Reservas Ativas</h2>						
 					</div>	
 
 					<div class="panel-body">
@@ -62,7 +62,7 @@
 												  <!--<li><a class="btn btn-primary btn-sm" href="/form_editar_reserva?id_reserva=<%= reservas[i].id_reserva %>&id_quarto=">Editar</a></li>-->
 												  <li><a class="btn btn-link" onclick="deleteReserva(<%= reservas[i].id_reserva %>, <%= reservas[i].id_quarto %>)">Excluir</a></li>
 												</ul>
-											  </div>
+											 </div>
 											</td>
 										<% } %>
 										<% } %>
@@ -75,20 +75,11 @@
 			</div>
 		</div>
 	</div>
-
-
-	  		 
-			
-			
-
 	
-	
-
-	
-
 	<%- include('modais_reserva'); %>
-
+	
 	<script src="css/bootstrap/dist/js/bootstrap.min.js"></script>
+	
 
 	<script type="text/javascript">
 		var itensConsumo = {};

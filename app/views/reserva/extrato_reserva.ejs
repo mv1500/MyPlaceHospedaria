@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <%- include('../_includes/cabecalho'); %>
+
+    <style>
+        .linhaDivisao{
+            border: black 1px solid;
+        }
+    </style>
+
+</head>
+
+<body>
+    <%- include('../_includes/navbar'); %>
+
+    <div class="container corpoSite">
+
+        <div class="row ">
+            <div class="col-lg-7 col-lg-offset-3" style="padding-top:30px;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="tituloCard">Extrato da reserva N° <%= dadosExtrato.reserva[0].id_reserva %></h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class=" col-lg-10" style="padding-left: 150px;">
+                                <table class="table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th class="col-lg-6">Hospede:</th>
+                                            <td class="col-lg-6"><%= dadosExtrato.reserva[0].nome %></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-6">Cama:</th>
+                                            <td class="col-lg-6"><%= dadosExtrato.reserva[0].nome_cama %></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-6">Checkin:</th>
+                                            <td class="col-lg-6"><%= dadosExtrato.reserva[0].checkin %></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-6">Checkout:</th>
+                                            <td class="col-lg-6"><%= dadosExtrato.reserva[0].data_checkout %></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-6">Valor diaria:</th>
+                                            <td class="col-lg-6"><%= dadosExtrato.reserva[0].valor %></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-6">Diarias:</th>
+                                            <td class="col-lg-6"><%= dadosExtrato.reserva[0].diaras %></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <hr class="linhaDivisao">
+
+                        <div class="row">
+                            <div class=" col-lg-10" style="padding-left: 150px;">
+                                <h4>Consumo</h4>
+
+                                <table class="table table-bordered table-condensed ">
+                                    <thead>
+                                        <th>Item</th>
+                                        <th>Data Consumo</th>
+                                        <th>Quantidade</th>
+                                        <th>Valor Total</th>
+                                    </thead>
+                                    <tbody>
+                                        <% for(var i = 0; i < dadosExtrato.itensConsumidos.length; i++){%>
+                                        <tr>
+                                            <td><%= dadosExtrato.itensConsumidos[i].nome_item %></td>
+                                            <td><%= dadosExtrato.itensConsumidos[i].data_consumo %></td>
+                                            <td><%= dadosExtrato.itensConsumidos[i].quantidade %></td>
+                                            <td><%= dadosExtrato.itensConsumidos[i].valor_total %></td>
+                                        </tr>
+                                        <%}%>
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr class="linhaDivisao">
+
+                    <div class="row">
+                        <div class=" col-lg-12" style="padding-left: 200px;">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th class="col-lg-6">Total das diaria:</th>
+                                        <td><%= dadosExtrato.totalDiarias %></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-6">Total Consumo:</th>
+                                            <td><%= dadosExtrato.totalConsumo %></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-lg-6">Valor total:</th>
+                                            <td><%= dadosExtrato.valorTotal%></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="css/bootstrap/dist/js/bootstrap.min.js"></script>
+
+            <script>
+
+
+            </script>
+
+</body>
+
+</html>

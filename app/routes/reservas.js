@@ -12,6 +12,10 @@ module.exports = function(application){
 		  application.app.controllers.reserva.reserva(application, req, res);		
     });
 
+    application.get('/extrato_reserva', function(req, res){		
+		  application.app.controllers.reserva.extrato_reserva(application, req, res);		
+    });
+
     application.get('/cad_reserva', function(req, res){		
 		application.app.controllers.reserva.cad_reserva(application, req, res);		
     });

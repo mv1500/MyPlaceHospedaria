@@ -13,61 +13,77 @@
 	<%- include('../_includes/navbar'); %>
 
 	<div class="container corpoSite">
-		<div class="row">
-			<div class="col col-md-9 tituloInfo">
-				<h2>Historico de reservas</h2>
-			</div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-lg-10">
-				<table class="table">
-					<thead>
-						<th>Quarto </th>
-						<th>Cama</th>
-						<th>Cliente</th>
-                        <th>Chekin</th>
-                        <th>Checkout</th>
-						<th>status</th>
-						<th colspan="2">Ações</th>
-					</thead>
-					<tbody>
-						<% if(reservas.length > 0){ %>
-						<% for(var i = 0; i < reservas.length; i++){ %>
-						<tr>
-							<td><%= reservas[i].nome_quarto %></td>
-							<td><%= reservas[i].nome_cama %></td>
-							<td><a href="reserva?id_reserva=<%= reservas[i].id_reserva %>"><%= reservas[i].nome %></a>
+		<div class="row ">
+			<div class="col-lg-12" style="margin-left: 120px; padding-top:30px;">
+				<div class="row">
+					<div class="col col-md-9 tituloInfo">
+						<h2>Historico de reservas</h2>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-lg-10">
+						<table class="table table-condensed">
+							<thead>
+								<th>Cod Reserva</th>
+								<th>Quarto </th>
+								<th>Cama</th>
+								<th>Cliente</th>
+								<th>Chekin</th>
+								<th>Checkout</th>
+								<th>status</th>
+								<th colspan="2">Ações</th>
+							</thead>
+							<tbody>
+								<% if(reservas.length > 0){ %>
+								<% for(var i = 0; i < reservas.length; i++){ %>
+								<tr>
+									<td>
+										<% if(reservas[i].status == 'Finalizada') {%>
+										<a href="extrato_reserva?id_reserva=<%= reservas[i].id_reserva %>">
+											<%= reservas[i].id_reserva %>
+										</a>
+										<%} else {%>
+										<a href="reserva?id_reserva=<%= reservas[i].id_reserva %>">
+											<%= reservas[i].id_reserva %>
+										</a>
+										<%}%> 											
 							</td>
-                            <td><%= reservas[i].checkin %></td>
-                            <td> 
-                                <% if(reservas[i].status == 'Finalizada') {%>
-                                    <%= reservas[i].data_checkout %>
-								<%} else {%>
-									<button class="btn btn-info"
-									onclick="modalCheckout(<%= reservas[i].id_reserva %>, <%= reservas[i].id_cama %>)">Registrar
-                                    checkout</button>	
-								<%}%>   
+							<td><%= reservas[i].nome_quarto %></td>
+									<td><%= reservas[i].nome_cama %></td>
+									<td><%= reservas[i].nome %></a>
+									</td>
+									<td><%= reservas[i].checkin %></td>
+									<td>
+										<% if(reservas[i].status == 'Finalizada') {%>
+										<%= reservas[i].data_checkout %>
+										<%} else {%>
+										<button class="btn btn-info"
+											onclick="modalCheckout(<%= reservas[i].id_reserva %>, <%= reservas[i].id_cama %>)">Registrar
+											checkout</button>
+										<%}%>   
                             </td>
 							<td><%= reservas[i].status %></td>
-							<td>
-                               <% if(reservas[i].status == 'Ativo') {%>
-								
-                                <%}%>    
+									<td>
+										<% if(reservas[i].status == 'Ativo') {%>
+
+										<%}%>    
 							</td>
 							<!--<td>
 								<a class="btn btn-primary btn-sm"
 									href="/form_editar_reserva?id_reserva=<%= reservas[i].id_reserva %>&id_quarto=">Editar</a>
-							</td> -->
-							<td>
-								<button class="btn btn-danger btn-sm"
-									onclick="deleteReserva(<%= reservas[i].id_reserva %>, <%= reservas[i].id_quarto %>)">Excluir</button>
-							</td>
-						</tr>
-						<% } %>
-						<% } %>
-					</tbody>
-				</table>
+									</td> -->
+									<td>
+										<button class="btn btn-danger btn-sm"
+											onclick="deleteReserva(<%= reservas[i].id_reserva %>, <%= reservas[i].id_quarto %>)">Excluir</button>
+									</td>
+								</tr>
+								<% } %>
+								<% } %>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

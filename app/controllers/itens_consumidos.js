@@ -66,8 +66,6 @@ module.exports.editarItens = function(application, req, res) {
 		
 }
 
-
-
 module.exports.excluirItens = function(application, req, res) {
 
 	var item = req.query;
@@ -85,10 +83,6 @@ module.exports.excluirItens = function(application, req, res) {
 	});
 		
 }
-
-
-
-
 
 // Funções de ItemConsumo
 module.exports.ItensConsumidos = function(application, req, res) {

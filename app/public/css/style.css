@@ -38,9 +38,8 @@ a:hover{
 	display: block;
 }
 
-.noticia_resumo{
-	color:#333;
-	margin-right:10px;
+.tituloCard{
+	margin-left: 20px;
 }
 
 .ver_mais{
