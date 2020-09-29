@@ -1,6 +1,5 @@
 CREATE database myplace_hospedaria;
 
-
 CREATE TABLE `cama` (
   `id_cama` int(11) NOT NULL,
   `id_quarto` int(11) NOT NULL,
@@ -10,9 +9,10 @@ CREATE TABLE `cama` (
 );
 
 
+
 INSERT INTO `cama` (`id_cama`, `id_quarto`, `nome_cama`, `tipo_cama`, `valor`) VALUES
-(1, 1, 'Cama beliche feminina', 'Beliche(parte de cima)', '50.00'),
-(2, 1, 'Cama beliche feminina', 'Beliche(parte de baixo)', '50.00'),
+(1, 1, 'Cama beliche feminina 01', 'Beliche(parte de cima)', '30.00'),
+(2, 1, 'Cama beliche feminina 02', 'Beliche(parte de baixo)', '50.00'),
 (3, 1, 'Cama beliche feminina', 'Beliche(parte de cima)', '50.00'),
 (4, 1, 'Cama beliche feminina', 'Beliche(parte de baixo)', '50.00'),
 (5, 1, 'Cama beliche feminina', 'Beliche(parte de cima)', '50.00'),
@@ -41,6 +41,7 @@ INSERT INTO `cama` (`id_cama`, `id_quarto`, `nome_cama`, `tipo_cama`, `valor`) V
 (28, 6, 'Cama box solteiro', 'Box solteiro', '50.00');
 
 
+
 CREATE TABLE `endereco_hospede` (
   `id_endereco` int(11) NOT NULL,
   `id_hospede` int(11) NOT NULL,
@@ -50,6 +51,8 @@ CREATE TABLE `endereco_hospede` (
   `estado` varchar(30) NOT NULL,
   `pais` varchar(30) NOT NULL
 );
+
+
 
 CREATE TABLE `hospede` (
   `id_hospede` int(11) NOT NULL,
@@ -70,6 +73,28 @@ CREATE TABLE `hospede` (
   `data_cadastro` datetime NOT NULL DEFAULT current_timestamp()
 );
 
+
+
+CREATE TABLE `item_consumo` (
+  `id_item_consumo` int(11) NOT NULL,
+  `id_item` int(11) NOT NULL,
+  `id_reserva` int(11) NOT NULL,
+  `data_consumo` datetime NOT NULL DEFAULT current_timestamp(),
+  `quantidade` int(11) NOT NULL,
+  `desconto` int(11) NOT NULL,
+  `valor_total` decimal(7,2) NOT NULL
+);
+
+
+
+CREATE TABLE `itens` (
+  `id_item` int(11) NOT NULL,
+  `nome_item` varchar(200) NOT NULL,
+  `valor` float(7,2) NOT NULL
+);
+
+
+
 CREATE TABLE `quarto` (
   `id_quarto` int(11) NOT NULL,
   `nome_quarto` varchar(100) NOT NULL,
@@ -78,8 +103,10 @@ CREATE TABLE `quarto` (
   `qnt_camas` int(11) NOT NULL
 );
 
+
+
 INSERT INTO `quarto` (`id_quarto`, `nome_quarto`, `descricao`, `categoria`, `qnt_camas`) VALUES
-(1, 'Quarto coletivo feminino', 'Quarto coletivo feminino com 8 camas beliche.', 'coletivo feminino', 8),
+(1, 'Quarto coletivo feminino', 'Quarto coletivo feminino com 8 camas beliche.', 'Coletivo feminino', 8),
 (2, 'Quarto coletivo masculino', 'Quarto coletivo masculino com 8 camas beliche.', 'Coletivo masculino', 8),
 (3, 'Quarto quadruplo misto', 'Quarto quadruplo misto com 4 camas box solteiro.', 'Coletivo misto', 4),
 (4, 'Suíte casal', 'Suíte casal.', 'Suíte casal', 1),
@@ -97,42 +124,15 @@ CREATE TABLE `reserva` (
   `data_cadastro` datetime NOT NULL DEFAULT current_timestamp()
 );
 
-CREATE TABLE `status_cama` (
-  `id_statusCama` int(11) NOT NULL,
-  `id_cama` int(11) NOT NULL,
-  `status` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-INSERT INTO `status_cama` (`id_statusCama`, `id_cama`, `status`) VALUES
-(1, 1, 'Vago'),
-(2, 2, 'Vago'),
-(3, 3, 'Vago'),
-(4, 4, 'Vago'),
-(5, 5, 'Vago'),
-(6, 6, 'Vago'),
-(7, 7, 'Vago'),
-(8, 8, 'Vago'),
-(9, 9, 'Vago'),
-(10, 10, 'Vago'),
-(11, 11, 'Vago'),
-(12, 12, 'Vago'),
-(13, 13, 'Vago'),
-(14, 14, 'Vago'),
-(15, 15, 'Vago'),
-(16, 16, 'Vago'),
-(17, 17, 'Vago'),
-(18, 18, 'Vago'),
-(19, 19, 'Vago'),
-(20, 20, 'Vago'),
-(21, 21, 'Vago'),
-(22, 22, 'Vago'),
-(23, 23, 'Vago'),
-(24, 24, 'Vago'),
-(25, 25, 'Vago'),
-(26, 26, 'Vago'),
-(27, 27, 'Vago'),
-(28, 28, 'Vago');
+INSERT INTO `reserva` (`id_reserva`, `id_cama`, `id_hospede`, `checkin`, `data_checkout`, `status`, `data_cadastro`) VALUES
+(9, 17, 7, '2020-07-24 00:59:00', '2020-07-27 01:49:00', 'Finalizada', '2020-07-24 01:00:01'),
+(10, 10, 8, '2020-07-27 02:01:00', '2020-09-27 00:00:00', 'Ativo', '2020-07-27 02:01:16'),
+(11, 1, 6, '2020-07-27 02:02:00', '2020-07-27 00:00:00', 'Ativo', '2020-07-27 02:03:01'),
+(13, 1, 6, '2020-07-31 15:21:00', '2020-07-31 15:26:00', 'Finalizada', '2020-07-31 15:22:13'),
+(14, 3, 10, '2020-09-28 13:40:00', '2020-09-29 13:00:00', 'Finalizada', '2020-08-27 13:40:24'),
+(15, 11, 7, '2020-08-29 00:00:00', '2000-09-28 00:00:00', 'Ativo', '2020-08-27 14:23:02');
 
 
 ALTER TABLE `cama`
@@ -142,48 +142,30 @@ ALTER TABLE `cama`
 ALTER TABLE `endereco_hospede`
   ADD PRIMARY KEY (`id_endereco`);
 
+
 ALTER TABLE `hospede`
   ADD PRIMARY KEY (`id_hospede`);
+
+
+ALTER TABLE `item_consumo`
+  ADD PRIMARY KEY (`id_item_consumo`);
+
+ALTER TABLE `itens`
+  ADD PRIMARY KEY (`id_item`);
+
 
 ALTER TABLE `quarto`
   ADD PRIMARY KEY (`id_quarto`);
 
+
 ALTER TABLE `reserva`
   ADD PRIMARY KEY (`id_reserva`);
-
-ALTER TABLE `status_cama`
-  ADD PRIMARY KEY (`id_statusCama`);
 
 
 ALTER TABLE `cama`
   MODIFY `id_cama` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
---
--- AUTO_INCREMENT de tabela `endereco_hospede`
---
-ALTER TABLE `endereco_hospede`
-  MODIFY `id_endereco` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- AUTO_INCREMENT de tabela `hospede`
---
-ALTER TABLE `hospede`
-  MODIFY `id_hospede` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- AUTO_INCREMENT de tabela `quarto`
---
 ALTER TABLE `quarto`
   MODIFY `id_quarto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
---
--- AUTO_INCREMENT de tabela `reserva`
---
-ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
---
--- AUTO_INCREMENT de tabela `status_cama`
---
-ALTER TABLE `status_cama`
-  MODIFY `id_statusCama` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
